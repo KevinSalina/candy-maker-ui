@@ -1,16 +1,21 @@
 const express = require('express')
+const path = require('path')
 const { getAllManufacturers, getManufacturerById } = require('./controllers/manufacturers')
 const { getAllProducts, getProductsById } = require('./controllers/products')
 
 const app = express()
 
-app.get('/manufacturers', getAllManufacturers)
+app.use(express.static('client/build'))
 
-app.get('/manufacturers/:name', getManufacturerById)
+app.get('/api/manufacturers', getAllManufacturers)
 
-app.get('/products', getAllProducts)
+app.get('/api/manufacturers/:name', getManufacturerById)
 
-app.get('/products/:name', getProductsById)
+app.get('/api/products', getAllProducts)
+
+app.get('/api/products/:name', getProductsById)
+
+app.all('*', (request, response) => response.sendFile(path.resolve(__dirname, 'client/public', 'index.html')))
 
 app.listen(1337, () => {
   console.log('Listening on port 1337...') // eslint-disable-line no-console
